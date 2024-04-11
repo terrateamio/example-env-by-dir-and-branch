@@ -41,7 +41,13 @@ destination_branches:
 # environment script with the passing in the environment this is being run
 # against.  In this configuration, it is the responsibility of the environment
 # script to specify the correct values based on this parameter.  See the
-# environment script for ow it operates.
+# environment script for how it operates.
+#
+# The workflow step with type "env" modifies the Unix shell environment
+# variables that following operations will execute with.  The method "source"
+# means that the command executed is a bash script that sets environment
+# variables, this way many environment variables can be updated in one
+# operation.
 workflows:
   - tag_query: 'dest_branch:main'
     plan:
