@@ -1,5 +1,9 @@
 #! /usr/bin/env bash
 
+# The environment that this is being executed on is passed in as the first
+# parameter to the file and the appropriate configuration is defined based on
+# that.
+
 case "$1" in
     "main")
         export ENV_NAME=prod

@@ -1,9 +1,29 @@
+# This configuration shows how to make the infrastructure that is modified by a
+# plan and apply change depending on what the destination branch of the pull
+# request is.  For example, a pull request made between a feature branch and dev
+# would plan and apply against the development infrastructure.
+#
+# This way, the same code can be used and applied to multiple infrastructures.
+
+# In order to perform different workflows based on the destination branch of the
+# pull request, we need to add configuration for how to turn the destination
+# branch into a tag that we can then use in a tag query.  The "dest_branch"
+# configuration is a map of the tag value as the key and a regular expression as
+# the value.  The destination branch of the pull request is matched against
+# every regular expression looking for the first one that matches.
 tags:
   dest_branch:
     main: '^main$'
     staging: '^staging$'
     dev: '^dev$'
 
+# By default, Terrateam will only perform operations if a pull request is
+# performed against the repository's default branch.  This configuration
+# specifies which combination of destination branch and source branch Terrateam
+# should evalaute for operations.  The string '*' means any branch, and those
+# strings that start with '!' mean NOT.  In this configuration, Terrateam will
+# evaluate pull requests going to the "dev" branch where the source branch is
+# any branch EXCEPT for main and staging.
 destination_branches:
   - branch: main
     source_branches: ['staging']
@@ -12,7 +32,16 @@ destination_branches:
   - branch: dev
     source_branches: ['*', '!main', '!staging']
 
-
+# We want to support different configuration based on where the change is going,
+# so if the pull request is to "dev", we want to modify the "dev"
+# infrastructure, etc.
+#
+# To accomplish this, we use a tag query to looking at the "dest_branch" tag
+# based on the configuration in the "tags" section above.  We then call the
+# environment script with the passing in the environment this is being run
+# against.  In this configuration, it is the responsibility of the environment
+# script to specify the correct values based on this parameter.  See the
+# environment script for ow it operates.
 workflows:
   - tag_query: 'dest_branch:main'
     plan:
