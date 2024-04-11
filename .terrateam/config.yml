@@ -1,0 +1,55 @@
+tags:
+  dest_branch:
+    main: '^main$'
+    staging: '^staging$'
+    dev: '^dev$'
+
+destination_branches:
+  - branch: main
+    source_branches: ['staging']
+  - branch: staging
+    source_branches: ['dev']
+  - branch: dev
+    source_branches: ['*', '!main', '!staging']
+
+
+workflows:
+  - tag_query: 'dest_branch:main'
+    plan:
+      - type: env
+        method: source
+        cmd: ['environment', 'main']
+      - type: init
+      - type: plan
+    apply:
+      - type: env
+        method: source
+        cmd: ['environment', 'main']
+      - type: init
+      - type: apply
+  - tag_query: 'dest_branch:staging'
+    plan:
+      - type: env
+        method: source
+        cmd: ['environment', 'staging']
+      - type: init
+      - type: plan
+    apply:
+      - type: env
+        method: source
+        cmd: ['environment', 'staging']
+      - type: init
+      - type: apply
+  - tag_query: 'dest_branch:dev'
+    plan:
+      - type: env
+        method: source
+        cmd: ['environment', 'dev']
+      - type: init
+      - type: plan
+    apply:
+      - type: env
+        method: source
+        cmd: ['environment', 'dev']
+      - type: init
+      - type: apply

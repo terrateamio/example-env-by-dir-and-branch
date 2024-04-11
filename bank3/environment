@@ -1,0 +1,22 @@
+#! /usr/bin/env bash
+
+case "$1" in
+    "main")
+        export ENV_NAME=prod
+        export ACCOUNT=bank3-prod-account
+        export ACCOUNT_SECRET="BANK3_PROD_ACCOUNT_SECRET"
+        ;;
+    "staging")
+        export ENV_NAME=staging
+        export ACCOUNT=bank3-staging-account
+        export ACCOUNT_SECRET="BANK3_STAGING_ACCOUNT_SECRET"
+        ;;
+    "dev")
+        export ENV_NAME=dev
+        export ACCOUNT=bank3-dev-account
+        export ACCOUNT_SECRET="BANK3_DEV_ACCOUNT_SECRET"
+        ;;
+    *)
+        exit 1
+        ;;
+esac
